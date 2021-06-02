@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
 using FilmsNet.Models;
+using System.Net;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmsNet.Controllers
 {
@@ -18,11 +21,14 @@ namespace FilmsNet.Controllers
         }
         [HttpGet]
         [Route("/api/GetFilms")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var filmList = ctx.Films.ToList();
-            var json = JsonSerializer.Serialize(filmList);
-            return Ok(json);
+            var filmList = await ctx.Films.ToListAsync();
+
+            if (filmList.Count > 0)
+                return Json(JsonConvert.SerializeObject(filmList));
+            else
+                return NotFound();
         }
 
         [HttpPost("/api/AddFilm/{title}/{year}")]
@@ -30,27 +36,49 @@ namespace FilmsNet.Controllers
         {
             Film film = new Film()
             {
-                Id = 2,
+                Id = 0,
                 Title = title,
                 Year = year
             };
-            var res = ctx.Films.Add(film);
 
-            ctx.SaveChanges();
-            return Ok();
+            if (!ctx.Entry<Film>(film).IsKeySet) // false means add entity
+            {
+                await ctx.Films.AddAsync(film);
+                await ctx.SaveChangesAsync();
+                return Ok();
+            }
+            else
+                return BadRequest();
+
         }
 
         [HttpPatch("/api/PatchFilm/{id}/{title}/{year}")]
         public async Task<IActionResult> UpdateFilm(int id, string title, int year)
         {
-            return Ok();
+            var film = await ctx.Films.FindAsync(id);
+            if (film != null)
+            {
+                film.Title = title;
+                film.Year = year;
+                ctx.Entry(film).CurrentValues.SetValues(film);
+                await ctx.SaveChangesAsync();
+                return Ok();
+            }
+            else
+                return BadRequest();
         }
 
         [HttpDelete("/api/DeleteFilm/{id}")]
         public async Task<IActionResult> DeleteFilm(int id)
         {
-            return Ok();
+            var film = await ctx.Films.FindAsync(id);
+            if(film!=null)
+            {
+                ctx.Films.Remove(film);
+                await ctx.SaveChangesAsync();
+                return Ok();
+            }
+            return BadRequest();
         }
-
     }
 }

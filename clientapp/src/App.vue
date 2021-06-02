@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     async onDeleteFilm(id, index) {
-      if (confirm("Do you want to delete " + this.films[index].title + "?")) {
+      if (confirm("Do you want to delete " + this.films[index].Title + "?")) {
         await this.deleteFilm(id);
         await this.getFilmsList();
       } else return;
@@ -87,19 +87,15 @@ export default {
       this.closeModal();
     },
     async getFilmsList() {
-      try {
-        const response = await axios.get("/api/GetFilms");
-        alert(response);
-      } catch (error) {
-        alert(error+"error");
-      }
+        await axios
+		.get("/api/GetFilms")
+		.then(response => {
+			this.films = JSON.parse(response.data);
+		})
     },
     async addFilm(title, year) {
         await axios
           .post("/api/AddFilm/"+title+"/"+year)
-          .then(function (response) {
-            alert("OK"+response);
-          })
           .catch(function (error) {
             alert(error);
           });
@@ -107,20 +103,13 @@ export default {
     async updateFilm(id, title, year) {
         await axios
           .patch("/api/PatchFilm/"+id+"/"+title+"/"+year)
-          .then(function (response) {
-            alert("OK"+response);
-          })
           .catch(function (error) {
             alert(error);
           });
     },
     async deleteFilm(id) {
-      const path = "/api/DeleteFilm/" + id;
       await axios
-        .delete(path)
-        .then(function (response) {
-          alert("OK"+response);
-        })
+        .delete("/api/DeleteFilm/" + id)
         .catch(function (error) {
           alert(error);
         });
@@ -128,55 +117,6 @@ export default {
   },
   mounted() {
     this.getFilmsList();
-  },
-  created() {
-    this.films = [
-      {
-        id: 1,
-        title: "Assasins Creed",
-        year: 2019,
-      },
-      {
-        id: 2,
-        title: "People",
-        year: 1997,
-      },
-      {
-        id: 11,
-        title: "Boom",
-        year: 2006,
-      },
-      {
-        id: 4,
-        title: "Assasins Creed",
-        year: 2019,
-      },
-      {
-        id: 5,
-        title: "People",
-        year: 1997,
-      },
-      {
-        id: 6,
-        title: "Boom",
-        year: 2006,
-      },
-      {
-        id: 7,
-        title: "People",
-        year: 1997,
-      },
-      {
-        id: 8,
-        title: "Boom",
-        year: 2006,
-      },
-      {
-        id: 9,
-        title: "Assasins Creed",
-        year: 2019,
-      },
-    ];
   },
 };
 </script>
@@ -194,6 +134,13 @@ body {
   border: 0;
   color: #fff;
   border-radius: 5px;
+}
+.anim-btn{
+  transition: transform 0.2s ease-in-out;
+}
+.anim-btn:hover {
+	transform: scale(0.9);
+	cursor: pointer;
 }
 
 .container {
