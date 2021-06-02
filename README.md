@@ -1,4 +1,4 @@
-# FilmsXamarin
+# FilmsNET
 
 ## Table of contents
 * [General info](#general-info)
@@ -6,7 +6,7 @@
 * [Setup](#setup)
 
 ## General info
-Xamarin application that allows user to create a database of your favorite movies.
+ASP and Vue application that allows to create a database of your favorite movies.
 	
 ## Technologies
 Project is created with:
@@ -21,17 +21,17 @@ Project is created with:
 ## Setup
 To run this project:
 
-### Install following NuGet Packages:
+<h3 Install following NuGet Packages:</h3>
 * VueCliMiddleware
 * Microsoft.EntityFramework
 * Microsoft.EntityFrameworkCore
 * Microsoft.EntityFrameworkCore.SqlServer
 * Microsoft.EntityFrameworkCore.Tools
 
-### NPM:
+<h3 NPM:</h3>
 * npm install vuelidate --save
 * npm install axios
 
-### SQL Server
+<h3 SQL Server</h3>
 * Set your connection string in appsettings.json
 * Add migrations
