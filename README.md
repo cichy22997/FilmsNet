@@ -21,17 +21,17 @@ Project is created with:
 ## Setup
 To run this project:
 
-<h3 Install following NuGet Packages:</h3>
+### Install following NuGet Packages:
 * VueCliMiddleware
 * Microsoft.EntityFramework
 * Microsoft.EntityFrameworkCore
 * Microsoft.EntityFrameworkCore.SqlServer
 * Microsoft.EntityFrameworkCore.Tools
 
-<h3 NPM:</h3>
+### NPM:
 * npm install vuelidate --save
 * npm install axios
 
-<h3 SQL Server</h3>
+### SQL Server
 * Set your connection string in appsettings.json
 * Add migrations
